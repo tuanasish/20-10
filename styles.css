@@ -569,7 +569,7 @@ body {
     color: var(--primary-rose);
     text-align: right;
     margin-top: var(--spacing-md);
-    transform: rotate(-1deg);
+    transform: none;
     letter-spacing: 1px;
 }
 
