@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 ❤️</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Great+Vibes&family=Satisfy&family=Allura&display=swap" rel="stylesheet">
     
     <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -47,15 +47,7 @@
         <source src="Em Đồng Ý (I Do).mp3" type="audio/mpeg">
     </audio>
     
-    <!-- Music Control Button -->
-    <button id="musicToggle" class="music-toggle" onclick="toggleMusic()" title="Bật/Tắt nhạc nền">
-        🔇
-    </button>
     
-    <!-- Music Status Message -->
-    <div id="musicStatus" class="music-status">
-        Click để bật nhạc nền 🎵
-    </div>
     
     <!-- Particles.js Container -->
     <div id="particles-js"></div>
@@ -76,7 +68,7 @@
         <section id="letter-section" class="section active">
             <div class="content-wrapper">
                 <div class="letter-container" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-                    <h1 class="main-title" data-aos="fade-down" data-aos-duration="1200" data-aos-delay="100">Dành cho em..❤️</h1>
+                    <h1 class="main-title italic-title" data-aos="fade-down" data-aos-duration="1200" data-aos-delay="100">Dành cho em..❤️</h1>
                     <div class="letter-content">
                         <p class="letter-date">Ngày 20 tháng 10 năm 2025</p>
                         <div class="letter-text">
@@ -86,12 +78,12 @@
                             <p class="typing-text">Cảm ơn em đã đến và yêu anh, cố gắng cùng anh hàng ngày. Cảm ơn em đã luôn đáng yêu, dịu dàng cho anh nguồn động lực để cố gắng. Cảm ơn em vì những nụ cười, những giọt nước mắt và những khoảnh khắc bình yên bên nhau.</p>
                             <p class="typing-text">Chúc em có một ngày lễ 20-10 hạnh phúc, luôn xinh đẹp rạng rỡ, luôn yêu thương và bên cạnh anh.</p>
                             <p class="typing-text">Anh yêu em nhiều hơn những gì anh có thể diễn tả bằng lời...</p>
-                            <p class="letter-signature typing-text">Với tất cả tình yêu,</p>
-                            <p class="letter-signature typing-text">Anh yêu của em💕</p>
+                            <p class="letter-signature typing-text handwritten">Với tất cả tình yêu,</p>
+                            <p class="letter-signature typing-text handwritten-signature">Anh yêu của em💕</p>
                         </div>
                     </div>
                 </div>
-                <button class="continue-btn" onclick="goToPuzzle()" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300">
+                <button class="continue-btn" id="gameButton" onclick="goToPuzzle()" style="display: none;">
                     <span>Cùng tham gia 1 trò chơi nhé 💕</span>
                 </button>
             </div>
@@ -326,8 +318,8 @@
                     </div>
                 </div>
                 
-                <button class="continue-btn" onclick="nextSection('timeline-section')">
-                    <span>Khám phá hành trình ❤️</span>
+                <button class="continue-btn" onclick="goToQuiz()">
+                    <span>Thử thách cuối cùng ❤️</span>
                 </button>
             </div>
         </section>
@@ -421,13 +413,13 @@
                             <div class="timeline-photo">
                                 <img src="images/8.jpg" alt="Bức ảnh đẹp nhất" loading="lazy" />
                             </div>
-                            <p>Khoảnh khắc đẹp nhất của chúng ta, cùng nhau ngắm pháo hoa, đón năm mới, gương mặt rạng rỡỡ,..</p>
+                            <p>Khoảnh khắc đẹp nhất của chúng ta, gương mặt rạng rỡ, cùng nhau ngắm pháo hoa, đón năm mới..</p>
                             <span class="timeline-date">Kỷ niệm quý giá</span>
                         </div>
                     </div>
                 </div>
-                <button class="continue-btn" onclick="goToQuiz()">
-                    <span>Thử thách cuối cùng ❤️</span>
+                <button class="continue-btn" onclick="goToCarouselFromTimeline()">
+                    <span>Xem thêm khoảnh khắc 💕</span>
                 </button>
             </div>
         </section>
@@ -528,35 +520,8 @@
                             <p class="romantic-message">Anh yêu em vì chính con người em, không phải vì những câu trả lời đúng hay sai.</p>
                             <p class="final-message">Chúc em một ngày 20/10 thật hạnh phúc và ý nghĩa! ❤️</p>
                         </div>
-                        
-                        <!-- Countdown Timer Section -->
-                        <div class="countdown-section">
-                            <h4 class="countdown-title">Chúng ta yêu nhau được</h4>
-                            <div class="countdown-timer" id="countdown-timer">
-                                <div class="time-unit">
-                                    <span class="time-number" id="days">0</span>
-                                    <span class="time-label">Ngày</span>
-                                </div>
-                                <div class="time-unit">
-                                    <span class="time-number" id="hours">0</span>
-                                    <span class="time-label">Giờ</span>
-                                </div>
-                                <div class="time-unit">
-                                    <span class="time-number" id="minutes">0</span>
-                                    <span class="time-label">Phút</span>
-                                </div>
-                                <div class="time-unit">
-                                    <span class="time-number" id="seconds">0</span>
-                                    <span class="time-label">Giây</span>
-                                </div>
-                            </div>
-                            <p class="countdown-date">Từ ngày 04/11/2023 💕</p>
-                        </div>
                     </div>
                 </div>
-                <button class="continue-btn" onclick="restartJourney()" id="restart-btn" style="display: none;">
-                    <span>Xem lại từ đầu 💕</span>
-                </button>
             </div>
         </section>
     </div>

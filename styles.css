@@ -400,57 +400,6 @@ body {
 }
 
 /* Music Toggle Button */
-.music-toggle {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-rose) 0%, var(--primary-rose-light) 100%);
-    border: 1px solid var(--glass-border);
-    color: var(--text-primary);
-    font-size: 28px;
-    cursor: pointer;
-    box-shadow: var(--glass-shadow);
-    backdrop-filter: blur(20px);
-    z-index: 1000;
-    transition: all var(--transition-normal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.music-toggle::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    opacity: 0;
-    transition: opacity var(--transition-normal);
-}
-
-.music-toggle:hover {
-    transform: scale(1.1) rotate(5deg);
-    background: linear-gradient(135deg, var(--primary-rose-light), var(--accent-gold));
-    box-shadow: 
-        0 10px 30px rgba(168, 50, 78, 0.4),
-        0 0 20px rgba(212, 175, 55, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.music-toggle:hover::before {
-    opacity: 1;
-}
-
-.music-toggle:active {
-    transform: scale(0.95);
-}
 
 /* Main Container */
 .main-container {
@@ -609,6 +558,39 @@ body {
     background-clip: text;
     margin-top: var(--spacing-xl);
     font-weight: 600;
+}
+
+/* Handwritten signature styles */
+.handwritten {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-style: normal;
+    color: var(--primary-rose);
+    text-align: right;
+    margin-top: var(--spacing-md);
+    transform: rotate(-1deg);
+    letter-spacing: 1px;
+}
+
+.handwritten-signature {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--accent-gold);
+    text-align: right;
+    margin-top: var(--spacing-sm);
+    transform: rotate(-0.5deg);
+    letter-spacing: 2px;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Italic title style */
+.italic-title {
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    transform: rotate(-1deg);
+    letter-spacing: 0.5px;
 }
 
 /* Photo Gallery */
@@ -1281,60 +1263,7 @@ body {
     }
 }
 
-/* Music Toggle Button */
-.music-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid rgba(255, 136, 150, 0.4);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.music-toggle:hover {
-    background: rgba(255, 136, 150, 0.9);
-    transform: scale(1.1);
-    box-shadow: 0 8px 25px rgba(255, 136, 150, 0.6);
-}
-
-.music-toggle:active {
-    transform: scale(0.95);
-}
-
-/* Music Status Indicator */
-.music-status {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: #FF8896;
-    border: 2px solid rgba(255, 136, 150, 0.4);
-    backdrop-filter: blur(10px);
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    pointer-events: none;
-}
-
-.music-status.show {
-    opacity: 1;
-    transform: translateY(0);
-}
 
 /* Mini Game Puzzle Styles */
 .game-description {
@@ -1634,13 +1563,6 @@ body {
         backdrop-filter: blur(10px);
     }
     
-    .music-toggle {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-        bottom: 20px;
-        right: 20px;
-    }
 }
 
 @media (max-width: 480px) {

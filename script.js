@@ -111,6 +111,22 @@ function goToCarousel() {
         countdownSection.style.display = 'none';
     }
     
+    // Show timeline section (Hành Trình Tình Yêu)
+    const timelineSection = document.getElementById('timeline-section');
+    if (timelineSection) {
+        timelineSection.style.display = 'block';
+        timelineSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Go to carousel from timeline
+function goToCarouselFromTimeline() {
+    // Hide timeline section
+    const timelineSection = document.getElementById('timeline-section');
+    if (timelineSection) {
+        timelineSection.style.display = 'none';
+    }
+    
     // Show carousel section (album-section)
     const carouselSection = document.getElementById('album-section');
     if (carouselSection) {
@@ -119,7 +135,7 @@ function goToCarousel() {
     }
 }
 
-// Go to quiz section (from timeline)
+// Go to quiz section (from carousel)
 function goToQuiz() {
     // Hide current section
     const currentSection = document.querySelector('.section:not([style*="display: none"])');
@@ -229,6 +245,24 @@ function startBackgroundMusic() {
     }
 }
 
+function showGameButton() {
+    const gameButton = document.getElementById('gameButton');
+    if (gameButton) {
+        gameButton.style.display = 'block';
+        gameButton.style.opacity = '0';
+        gameButton.style.transform = 'translateY(20px)';
+        
+        // Animate button appearance
+        gsap.to(gameButton, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "back.out(1.7)",
+            delay: 0.5
+        });
+    }
+}
+
 function startTypingEffect() {
     const typingElements = document.querySelectorAll('.typing-text');
     let currentElementIndex = 0;
@@ -244,7 +278,8 @@ function startTypingEffect() {
     
     function typeNextElement() {
         if (currentElementIndex >= typingElements.length) {
-            // All elements typed - no need to show button as it's already in HTML
+            // All elements typed - show the game button
+            showGameButton();
             return;
         }
         
@@ -327,47 +362,6 @@ function showMusicInstruction() {
     }
 }
 
-function toggleMusic() {
-    const audio = document.getElementById('backgroundMusic');
-    const musicToggle = document.getElementById('musicToggle');
-    const musicStatus = document.getElementById('musicStatus');
-    
-    if (!audio) return;
-    
-    if (audio.paused || audio.muted) {
-        audio.muted = false;
-        audio.volume = 0.4;
-        audio.play().then(() => {
-            if (musicToggle) musicToggle.textContent = '🔊';
-            if (musicStatus) {
-                musicStatus.textContent = 'Nhạc nền đã bật 🎵';
-                musicStatus.classList.add('show');
-                setTimeout(() => {
-                    musicStatus.classList.remove('show');
-                }, 2000);
-            }
-        }).catch(error => {
-            console.log('Cannot play music:', error);
-            if (musicStatus) {
-                musicStatus.textContent = 'Không thể phát nhạc 😔';
-                musicStatus.classList.add('show');
-                setTimeout(() => {
-                    musicStatus.classList.remove('show');
-                }, 3000);
-            }
-        });
-    } else {
-        audio.pause();
-        if (musicToggle) musicToggle.textContent = '🔇';
-        if (musicStatus) {
-            musicStatus.textContent = 'Nhạc nền đã tắt 🔇';
-            musicStatus.classList.add('show');
-            setTimeout(() => {
-                musicStatus.classList.remove('show');
-            }, 2000);
-        }
-    }
-}
 
 // Navigation functions
 function nextSection(sectionId) {
@@ -528,11 +522,6 @@ function showQuizResults() {
         updateCountdown();
     }
     
-    // Show restart button
-    const restartBtn = document.getElementById('restart-btn');
-    if (restartBtn) {
-        restartBtn.style.display = 'block';
-    }
     
     // Scroll to results
     setTimeout(() => {
@@ -540,43 +529,6 @@ function showQuizResults() {
     }, 500);
 }
 
-function restartJourney() {
-    // Reset quiz state
-    currentQuestion = 1;
-    quizAnswers = {};
-    
-    // Hide all sections
-    const allSections = document.querySelectorAll('.section');
-    allSections.forEach(section => section.classList.remove('active'));
-    
-    // Show first section
-    const firstSection = document.getElementById('letter-section');
-    if (firstSection) {
-        firstSection.classList.add('active');
-        currentSection = 1;
-    }
-    
-    // Reset quiz UI
-    const resultsElement = document.getElementById('quiz-results');
-    if (resultsElement) {
-        resultsElement.style.display = 'none';
-    }
-    
-    const restartBtn = document.getElementById('restart-btn');
-    if (restartBtn) {
-        restartBtn.style.display = 'none';
-    }
-    
-    // Reset all quiz options
-    const allOptions = document.querySelectorAll('.quiz-option');
-    allOptions.forEach(option => {
-        option.style.background = 'linear-gradient(135deg, #ffc0cb, #ffb6c1)';
-        option.style.color = '#333';
-    });
-    
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
 // Keyboard navigation
 document.addEventListener('keydown', function(event) {
