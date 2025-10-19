@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 ❤️</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <!-- Loading Animation - Gift Box Opening -->
+    <div id="loading-overlay">
+        <div class="gift-box" id="giftBox" onclick="openGift()">
+            <div class="gift-lid" id="giftLid">
+                <div class="gift-bow">🎀</div>
+            </div>
+            <div class="gift-body">
+                <div class="gift-pattern">💕</div>
+            </div>
+        </div>
+        <div class="loading-text" id="loadingText">Click để mở món quà tình yêu... 💕</div>
+        <div class="loading-hearts">
+            <span class="heart">💕</span>
+            <span class="heart">💖</span>
+            <span class="heart">💗</span>
+        </div>
+        <div class="click-instruction">👆 Click vào hộp quà để mở</div>
+    </div>
+    
+    <!-- Audio Player -->
+    <audio id="backgroundMusic" loop preload="auto" autoplay muted>
+        <source src="Em Đồng Ý (I Do).mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Music Control Button -->
+    <button id="musicToggle" class="music-toggle" onclick="toggleMusic()" title="Bật/Tắt nhạc nền">
+        🔇
+    </button>
+    
+    <!-- Music Status Message -->
+    <div id="musicStatus" class="music-status">
+        Click để bật nhạc nền 🎵
+    </div>
+    
+    <!-- Floating Hearts Container -->
+    <div id="floatingHearts"></div>
+    
+    <!-- Falling Flowers Container -->
+    <div id="fallingFlowers"></div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        
+        <!-- Section 1: Bức Thư Tình -->
+        <section id="letter-section" class="section active">
+            <div class="content-wrapper">
+                <div class="letter-container">
+                    <h1 class="main-title">Gửi Em bé yêu của anh❤️</h1>
+                    <div class="letter-content">
+                        <p class="letter-date">Ngày 20 tháng 10 năm 2025</p>
+                        <div class="letter-text">
+                            <p class="typing-text">Gửi Em bé của anh,</p>
+                            <p class="typing-text">Hôm nay là ngày 20-10 - Ngày Phụ Nữ Việt Nam, bên cạnh những món quà vật chất, anh muốn gửi lời chúc ngọt ngào này tới em.</p>
+                            <p class="typing-text">Còn vài ngày nữa thôi là tụi mình sẽ gắn bó với nhau được 2 năm.</p>
+                            <p class="typing-text">Cảm ơn em đã đến và yêu anh, cố gắng cùng anh hàng ngày. Cảm ơn em đã luôn đáng yêu, dịu dàng cho anh nguồn động lực để cố gắng. Cảm ơn em vì những nụ cười, những giọt nước mắt và những khoảnh khắc bình yên bên nhau.</p>
+                            <p class="typing-text">Chúc em có một ngày lễ 20-10 hạnh phúc, luôn xinh đẹp rạng rỡ, luôn yêu thương và bên cạnh anh.</p>
+                            <p class="typing-text">Anh yêu em nhiều hơn những gì anh có thể diễn tả bằng lời...</p>
+                            <p class="letter-signature typing-text">Với tất cả tình yêu,</p>
+                            <p class="letter-signature typing-text">Anh của em 💕</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="continue-btn" onclick="nextSection('puzzle-section')">
+                    <span>Thử thách ghép ảnh ❤️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 2: Mini Game Puzzle -->
+        <section id="puzzle-section" class="section">
+            <div class="content-wrapper">
+                <h2 class="section-title">Mini Game: Ghép Ảnh Tình Yêu 💕</h2>
+                <p class="game-description">
+                    Em có thể ghép lại bức ảnh đẹp nhất của chúng ta không? 
+                    Click vào 2 ô để đổi chỗ, sắp xếp lại thành ảnh hoàn chỉnh nhé! ✨
+                </p>
+                
+                <div class="puzzle-container">
+                    <div class="puzzle-board" id="puzzleBoard"></div>
+                    
+                        <div class="puzzle-controls">
+                            <div class="game-info">
+                                <div class="moves-counter">
+                                    <span class="moves-label">Số lần di chuyển:</span>
+                                    <span class="moves-count" id="movesCount">0</span>
+                                </div>
+                                <div class="game-status" id="gameStatus">Bắt đầu thôi! 💖</div>
+                            </div>
+                        </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Section 3: Carousel Moments -->
+        <section id="album-section" class="section">
+            <div class="content-wrapper">
+                <!-- Carousel Moments -->
+                <div class="moments-carousel">
+                    <h3 class="carousel-title">Những Khoảnh Khắc Đáng Yêu 💕</h3>
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Ảnh từ folder moment -->
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-03.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-15.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-22.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-25.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-27.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-32.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-35.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-38.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-41.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="moment/photo_2025-10-19_13-03-54.jpg" alt="Khoảnh khắc đáng yêu" />
+                            </div>
+                            <!-- Video từ folder moment -->
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-03-46.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-03-59.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-03.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-07.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-12.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-16.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-19.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-22.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-25.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <video autoplay loop muted>
+                                    <source src="moment/doc_2025-10-19_13-04-28.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Những Điều 2 Đứa Đã Làm Cùng Nhau 💕</h2>
+                <div class="photo-gallery">
+                    <!-- Mức độ ý nghĩa cao nhất: Kỷ niệm đặc biệt -->
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cùng nhau ngắm khinh khí cầu.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cùng nhau ngắm khinh khí cầu ✨</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cùng nhau xem show ca nhạc.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cùng nhau xem show ca nhạc 🎵</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <img src="kiniem/cungnhaucheckinbaibien.jpg" alt="Cùng nhau check-in bãi biển" />
+                        </div>
+                        <div class="photo-caption">Cùng nhau check-in bãi biển 🏖️</div>
+                    </div>
+                    
+                    <!-- Mức độ ý nghĩa cao: Du lịch và khám phá -->
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cùng nhau tham quan tràng an.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cùng nhau tham quan tràng an 🏔️</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cùng nhau tham quan sở thú.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cùng nhau tham quan sở thú 🦒</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cùng nhau đi thủy cung.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cùng nhau đi thủy cung 🐠</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cùng nhau đi chơi công viên nước.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cùng nhau đi chơi công viên nước 💦</div>
+                    </div>
+                    
+                    <!-- Mức độ ý nghĩa trung bình: Hoạt động thường ngày -->
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/nấu ăn cùng nhau.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Nấu ăn cùng nhau 👨‍🍳</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <img src="kiniem/cùng nhau ăn những món ngon.jpg" alt="Cùng nhau ăn những món ngon" />
+                        </div>
+                        <div class="photo-caption">Cùng nhau ăn những món ngon 🍽️</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cùng nhau lượn phố cổ buổi sáng.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cùng nhau lượn phố cổ buổi sáng 🏛️</div>
+                    </div>
+                    
+                    <!-- Mức độ ý nghĩa thấp hơn: Hoạt động đơn giản -->
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <video autoplay loop muted>
+                                <source src="kiniem/cafe đường tàu.MP4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="photo-caption">Cafe đường tàu ☕</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="media-container">
+                            <img src="kiniem/thành quả workshop.jpg" alt="Thành quả workshop" />
+                        </div>
+                        <div class="photo-caption">Thành quả workshop 🎨</div>
+                    </div>
+                </div>
+                
+                <button class="continue-btn" onclick="nextSection('timeline-section')">
+                    <span>Khám phá hành trình ❤️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 3: Timeline Kỷ Niệm -->
+        <section id="timeline-section" class="section">
+            <div class="content-wrapper">
+                <h2 class="section-title">Hành Trình Tình Yêu Của Chúng Ta 💖</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">💕</div>
+                        <div class="timeline-content">
+                            <h3>Lần đầu gặp nhau</h3>
+                            <div class="timeline-photo">
+                                <img src="images/1.jpg" alt="Lần đầu gặp nhau" />
+                            </div>
+                            <p>Hôm ấy là một ngày đẹp trời, hai đứa có lần đầu tiên gặp nhau, ấn tượng đầu tiên của anh là em rất xinh đẹp và thân thiện.</p>
+                            <span class="timeline-date">Ngày đầu tiên</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">🤝</div>
+                        <div class="timeline-content">
+                            <h3>Cái nắm tay đầu tiên</h3>
+                            <div class="timeline-photo">
+                                <img src="images/2.jpg" alt="Cái nắm tay đầu tiên" />
+                            </div>
+                            <p>Khoảnh khắc ấm áp khi tay anh và tay em lần đầu tiên nắm lấy nhau,...</p>
+                            <span class="timeline-date">Kỷ niệm đáng nhớ</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">🎂</div>
+                        <div class="timeline-content">
+                            <h3>Sinh nhật đầu tiên hai đứa đón cùng nhau</h3>
+                            <div class="timeline-photo">
+                                <img src="3.png" alt="Sinh nhật đầu tiên" />
+                            </div>
+                            <p>Ngày sinh nhật đặc biệt nhất khi hai đứa phải đi khắp nơi tìm chỗ bán bánh, tìm chỗ tổ chức</p>
+                            <span class="timeline-date">Ngày đặc biệt</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">✈️</div>
+                        <div class="timeline-content">
+                            <h3>Chuyến du lịch đầu tiên</h3>
+                            <div class="timeline-photo">
+                                <img src="images/4.jpg" alt="Chuyến du lịch đầu tiên" />
+                            </div>
+                            <p>Chúng ta đã có những kỷ niệm tuyệt vời trong chuyến du lịch đầu tiên cùng nhau đến Cát Bà - Hải Phòng</p>
+                            <span class="timeline-date">Hành trình đẹp</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">🎉</div>
+                        <div class="timeline-content">
+                            <h3>Sinh nhật anh</h3>
+                            <div class="timeline-photo">
+                                <img src="images/5.jpg" alt="Sinh nhật anh" />
+                            </div>
+                            <p>Ngày sinh nhật anh trở nên đặc biệt hơn bao giờ hết khi có em bên cạnh, cùng thổi nến và cầu nguyện...</p>
+                            <span class="timeline-date">Ngày hạnh phúc</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">😢</div>
+                        <div class="timeline-content">
+                            <h3>Có những lúc nhớ nhau đến phát khóc</h3>
+                            <div class="timeline-photo">
+                                <img src="images/6.jpg" alt="Nhớ nhau đến phát khóc" />
+                            </div>
+                            <p>Những lúc xa nhau, em nhớ anh đến phát khóc, anh cũng chỉ có thể cho em lời động viên.</p>
+                            <span class="timeline-date">Khi xa nhau</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">🎄</div>
+                        <div class="timeline-content">
+                            <h3>Giáng sinh 2024</h3>
+                            <div class="timeline-photo">
+                                <img src="images/7.jpg" alt="Giáng sinh 2024" />
+                            </div>
+                            <p>Giáng sinh đầu tiên bên nhau, đêm Noel ấm áp với em,thật hạnh phúc..</p>
+                            <span class="timeline-date">Đêm Noel ấm áp</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">💖</div>
+                        <div class="timeline-content">
+                            <h3>Bức ảnh đẹp nhất</h3>
+                            <div class="timeline-photo">
+                                <img src="images/8.jpg" alt="Bức ảnh đẹp nhất" />
+                            </div>
+                            <p>Khoảnh khắc đẹp nhất của chúng ta, cùng nhau ngắm pháo hoa, đón năm mới, gương mặt rạng rỡỡ,..</p>
+                            <span class="timeline-date">Kỷ niệm quý giá</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="continue-btn" onclick="nextSection('quiz-section')">
+                    <span>Thử thách cuối cùng ❤️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 4: Quiz Tương Tác -->
+        <section id="quiz-section" class="section">
+            <div class="content-wrapper">
+                <h2 class="section-title">Quiz: Thử thách dành cho emem? 💕</h2>
+                <div id="quiz-container">
+                    <div class="quiz-question active" data-question="1">
+                        <h3>Ngày nào anh và em gặp nhau lần đầu tiên?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectAnswer(1, 'a')">A) Ngày đẹp trời</button>
+                            <button class="quiz-option" onclick="selectAnswer(1, 'b')">B) Ngày mưa</button>
+                            <button class="quiz-option" onclick="selectAnswer(1, 'c')">C) Ngày nắng đẹp</button>
+                        </div>
+                            </div>
+                    
+                    <div class="quiz-question" data-question="2">
+                        <h3>Món ăn yêu thích của em là gì?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectAnswer(2, 'a')">A) Phở</button>
+                            <button class="quiz-option" onclick="selectAnswer(2, 'b')">B) Bún bò</button>
+                            <button class="quiz-option" onclick="selectAnswer(2, 'c')">C) Món em nấu</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-question" data-question="3">
+                        <h3>Điều gì khiến em cười nhiều nhất?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectAnswer(3, 'a')">A) Joke của anh</button>
+                            <button class="quiz-option" onclick="selectAnswer(3, 'b')">B) Phim hài</button>
+                            <button class="quiz-option" onclick="selectAnswer(3, 'c')">C) Khi anh làm gì đó ngốc nghếch</button>
+                        </div>
+                            </div>
+                    
+                    <div class="quiz-question" data-question="4">
+                        <h3>Em thích hoạt động nào nhất với anh?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectAnswer(4, 'a')">A) Xem phim</button>
+                            <button class="quiz-option" onclick="selectAnswer(4, 'b')">B) Đi dạo</button>
+                            <button class="quiz-option" onclick="selectAnswer(4, 'c')">C) Ở nhà nấu ăn</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-results" id="quiz-results" style="display: none;">
+                        <h3>Kết Quả Quiz 💖</h3>
+                        <div class="result-message">
+                            <p>Dù em trả lời đúng hay sai, điều quan trọng nhất là chúng ta đang ở bên nhau và yêu thương nhau!</p>
+                            <p>Anh yêu em vì chính con người em, không phải vì những câu trả lời đúng hay sai.</p>
+                            <p class="final-message">Chúc em một ngày 20/10 thật hạnh phúc và ý nghĩa! ❤️</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="continue-btn" onclick="restartJourney()" id="restart-btn" style="display: none;">
+                    <span>Xem lại từ đầu 💕</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="effects.js"></script>
+    <script src="puzzle.js"></script>
+</body>
+</html>
