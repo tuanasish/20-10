@@ -1,27 +1,33 @@
-// Visual Effects for Romantic Website
-// This file handles all the beautiful visual effects like falling flowers and floating hearts
+// Visual Effects for Luxury Romantic Website
+// This file handles all the beautiful visual effects with Particles.js integration
 
 let heartInterval;
 let flowerInterval;
 let isEffectsActive = false;
+let particlesInstance = null;
 
-// Start floating hearts animation
+// Initialize Particles.js with luxury romantic theme (DISABLED for performance)
+function initializeParticles() {
+    // Disabled for performance - particles cause lag
+    console.log('Particles.js disabled for performance optimization');
+    startFloatingHearts();
+}
+
+// Start floating hearts animation (legacy fallback)
 function startFloatingHearts() {
     if (isEffectsActive) return;
     
     isEffectsActive = true;
     
-    // Create hearts less frequently (more elegant)
+    // Create hearts much less frequently for performance
     heartInterval = setInterval(() => {
         createFloatingHeart();
-    }, 4000); // Every 4 seconds instead of 2
+    }, 8000); // Every 8 seconds for better performance
     
-    // Create fewer initial hearts
-    for (let i = 0; i < 2; i++) {
-        setTimeout(() => {
-            createFloatingHeart();
-        }, i * 1000);
-    }
+    // Create only 1 initial heart for performance
+    setTimeout(() => {
+        createFloatingHeart();
+    }, 1000);
 }
 
 // Create a single elegant floating heart with SVG
@@ -388,9 +394,15 @@ document.addEventListener('DOMContentLoaded', function() {
     addParticleBurstAnimation();
     addFloatingTextAnimation();
     
-    // Start effects
-    startFloatingHearts();
-    startFallingFlowers();
+    // Initialize Particles.js (primary effect)
+    initializeParticles();
+    
+    // Fallback to legacy effects if particles fail
+    if (!particlesInstance) {
+        startFloatingHearts();
+        startFallingFlowers();
+    }
+    
     addClickSparkles();
     addRandomQuotes();
     
@@ -399,6 +411,10 @@ document.addEventListener('DOMContentLoaded', function() {
     continueButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             createSparkle(event.clientX, event.clientY);
+            // Trigger particles burst if available
+            if (particlesInstance) {
+                triggerParticlesBurst(event.clientX, event.clientY);
+            }
         });
     });
     
@@ -407,9 +423,56 @@ document.addEventListener('DOMContentLoaded', function() {
     quizOptions.forEach(option => {
         option.addEventListener('click', function(event) {
             createSparkle(event.clientX, event.clientY);
+            // Trigger particles burst if available
+            if (particlesInstance) {
+                triggerParticlesBurst(event.clientX, event.clientY);
+            }
         });
     });
 });
+
+// Trigger particles burst effect
+function triggerParticlesBurst(x, y) {
+    if (particlesInstance && particlesInstance.pJSDom) {
+        // Create temporary burst effect
+        const burstConfig = {
+            particles: {
+                number: { value: 20 },
+                color: { value: ["#A8324E", "#E8B4BC", "#D4AF37"] },
+                shape: { type: "circle" },
+                opacity: { value: 0.8 },
+                size: { value: 3 },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out"
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: false },
+                    onclick: { enable: false }
+                }
+            }
+        };
+        
+        // Apply burst effect temporarily
+        particlesInstance.pJSDom[0].pJS.particles.move.speed = 5;
+        particlesInstance.pJSDom[0].pJS.particles.number.value = 30;
+        
+        // Reset after 2 seconds
+        setTimeout(() => {
+            if (particlesInstance && particlesInstance.pJSDom) {
+                particlesInstance.pJSDom[0].pJS.particles.move.speed = 1;
+                particlesInstance.pJSDom[0].pJS.particles.number.value = 80;
+            }
+        }, 2000);
+    }
+}
 
 // Pause effects when page is not visible (for performance)
 document.addEventListener('visibilitychange', function() {

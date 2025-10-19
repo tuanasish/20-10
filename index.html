@@ -5,31 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 ❤️</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    
+    <!-- Three.js for 3D Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Particles.js for Interactive Particles -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Lenis Smooth Scrolling -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
 </head>
 <body>
-    <!-- Loading Animation - Gift Box Opening -->
+    <!-- Loading Animation - Letter Opening -->
     <div id="loading-overlay">
-        <div class="gift-box" id="giftBox" onclick="openGift()">
-            <div class="gift-lid" id="giftLid">
-                <div class="gift-bow">🎀</div>
-            </div>
-            <div class="gift-body">
-                <div class="gift-pattern">💕</div>
+        <div class="letter-envelope" id="letterEnvelope" onclick="openLetter()">
+            <img src="images/envelope.png" alt="Phong thư" class="envelope-image" />
+            <div class="letter-paper" id="letterPaper">
+                <div class="letter-content-preview">
+                    <div class="letter-line"></div>
+                    <div class="letter-line short"></div>
+                    <div class="letter-line"></div>
+                    <div class="letter-line short"></div>
+                </div>
             </div>
         </div>
-        <div class="loading-text" id="loadingText">Click để mở món quà tình yêu... 💕</div>
-        <div class="loading-hearts">
-            <span class="heart">💕</span>
-            <span class="heart">💖</span>
-            <span class="heart">💗</span>
-        </div>
-        <div class="click-instruction">👆 Click vào hộp quà để mở</div>
+        <div class="loading-text" id="loadingText">Em mở nó ra đi 💌</div>
     </div>
     
     <!-- Audio Player -->
@@ -47,10 +57,16 @@
         Click để bật nhạc nền 🎵
     </div>
     
-    <!-- Floating Hearts Container -->
+    <!-- Particles.js Container -->
+    <div id="particles-js"></div>
+    
+    <!-- Three.js Background Container -->
+    <div id="three-background"></div>
+    
+    <!-- Floating Hearts Container (Legacy) -->
     <div id="floatingHearts"></div>
     
-    <!-- Falling Flowers Container -->
+    <!-- Falling Flowers Container (Legacy) -->
     <div id="fallingFlowers"></div>
 
     <!-- Main Container -->
@@ -59,8 +75,8 @@
         <!-- Section 1: Bức Thư Tình -->
         <section id="letter-section" class="section active">
             <div class="content-wrapper">
-                <div class="letter-container">
-                    <h1 class="main-title">Gửi Em bé yêu của anh❤️</h1>
+                <div class="letter-container" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                    <h1 class="main-title" data-aos="fade-down" data-aos-duration="1200" data-aos-delay="100">Dành cho em..❤️</h1>
                     <div class="letter-content">
                         <p class="letter-date">Ngày 20 tháng 10 năm 2025</p>
                         <div class="letter-text">
@@ -71,11 +87,11 @@
                             <p class="typing-text">Chúc em có một ngày lễ 20-10 hạnh phúc, luôn xinh đẹp rạng rỡ, luôn yêu thương và bên cạnh anh.</p>
                             <p class="typing-text">Anh yêu em nhiều hơn những gì anh có thể diễn tả bằng lời...</p>
                             <p class="letter-signature typing-text">Với tất cả tình yêu,</p>
-                            <p class="letter-signature typing-text">Anh của em 💕</p>
+                            <p class="letter-signature typing-text">Anh yêu của em💕</p>
                         </div>
                     </div>
                 </div>
-                <button class="continue-btn" onclick="nextSection('puzzle-section')">
+                <button class="continue-btn" onclick="nextSection('puzzle-section')" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300">
                     <span>Thử thách ghép ảnh ❤️</span>
                 </button>
             </div>
@@ -84,13 +100,13 @@
         <!-- Section 2: Mini Game Puzzle -->
         <section id="puzzle-section" class="section">
             <div class="content-wrapper">
-                <h2 class="section-title">Mini Game: Ghép Ảnh Tình Yêu 💕</h2>
-                <p class="game-description">
+                <h2 class="section-title" data-aos="fade-down" data-aos-duration="1000">Mini Game: Ghép Ảnh Tình Yêu 💕</h2>
+                <p class="game-description" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
                     Em có thể ghép lại bức ảnh đẹp nhất của chúng ta không? 
                     Click vào 2 ô để đổi chỗ, sắp xếp lại thành ảnh hoàn chỉnh nhé! ✨
                 </p>
                 
-                <div class="puzzle-container">
+                <div class="puzzle-container" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
                     <div class="puzzle-board" id="puzzleBoard"></div>
                     
                         <div class="puzzle-controls">
@@ -117,34 +133,34 @@
                         <div class="carousel-track" id="carouselTrack">
                             <!-- Ảnh từ folder moment -->
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-03.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-03.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-15.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-15.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-22.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-22.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-25.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-25.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-27.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-27.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-32.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-32.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-35.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-35.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-38.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-38.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-41.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-41.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <div class="carousel-item">
-                                <img src="moment/photo_2025-10-19_13-03-54.jpg" alt="Khoảnh khắc đáng yêu" />
+                                <img src="moment/photo_2025-10-19_13-03-54.jpg" alt="Khoảnh khắc đáng yêu" loading="lazy" />
                             </div>
                             <!-- Video từ folder moment -->
                             <div class="carousel-item">
@@ -201,10 +217,10 @@
                     </div>
                 </div>
                 
-                <h2 class="section-title">Những Điều 2 Đứa Đã Làm Cùng Nhau 💕</h2>
-                <div class="photo-gallery">
+                <h2 class="section-title" data-aos="fade-down" data-aos-duration="1000">Những Điều 2 Đứa Đã Làm Cùng Nhau 💕</h2>
+                <div class="photo-gallery" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
                     <!-- Mức độ ý nghĩa cao nhất: Kỷ niệm đặc biệt -->
-                    <div class="photo-item">
+                    <div class="photo-item" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">
                         <div class="media-container">
                             <video autoplay loop muted>
                                 <source src="kiniem/cùng nhau ngắm khinh khí cầu.MP4" type="video/mp4">
@@ -213,7 +229,7 @@
                         <div class="photo-caption">Cùng nhau ngắm khinh khí cầu ✨</div>
                     </div>
                     
-                    <div class="photo-item">
+                    <div class="photo-item" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200">
                         <div class="media-container">
                             <video autoplay loop muted>
                                 <source src="kiniem/cùng nhau xem show ca nhạc.MP4" type="video/mp4">
@@ -319,14 +335,14 @@
         <!-- Section 3: Timeline Kỷ Niệm -->
         <section id="timeline-section" class="section">
             <div class="content-wrapper">
-                <h2 class="section-title">Hành Trình Tình Yêu Của Chúng Ta 💖</h2>
-                <div class="timeline">
+                <h2 class="section-title" data-aos="fade-down" data-aos-duration="1000">Hành Trình Tình Yêu Của Chúng Ta 💖</h2>
+                <div class="timeline" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
                     <div class="timeline-item">
                         <div class="timeline-marker">💕</div>
                         <div class="timeline-content">
                             <h3>Lần đầu gặp nhau</h3>
                             <div class="timeline-photo">
-                                <img src="images/1.jpg" alt="Lần đầu gặp nhau" />
+                                <img src="images/1.jpg" alt="Lần đầu gặp nhau" loading="lazy" />
                             </div>
                             <p>Hôm ấy là một ngày đẹp trời, hai đứa có lần đầu tiên gặp nhau, ấn tượng đầu tiên của anh là em rất xinh đẹp và thân thiện.</p>
                             <span class="timeline-date">Ngày đầu tiên</span>
@@ -337,7 +353,7 @@
                         <div class="timeline-content">
                             <h3>Cái nắm tay đầu tiên</h3>
                             <div class="timeline-photo">
-                                <img src="images/2.jpg" alt="Cái nắm tay đầu tiên" />
+                                <img src="images/2.jpg" alt="Cái nắm tay đầu tiên" loading="lazy" />
                             </div>
                             <p>Khoảnh khắc ấm áp khi tay anh và tay em lần đầu tiên nắm lấy nhau,...</p>
                             <span class="timeline-date">Kỷ niệm đáng nhớ</span>
@@ -348,7 +364,7 @@
                         <div class="timeline-content">
                             <h3>Sinh nhật đầu tiên hai đứa đón cùng nhau</h3>
                             <div class="timeline-photo">
-                                <img src="3.png" alt="Sinh nhật đầu tiên" />
+                                <img src="images/3.png" alt="Sinh nhật đầu tiên" loading="lazy" />
                             </div>
                             <p>Ngày sinh nhật đặc biệt nhất khi hai đứa phải đi khắp nơi tìm chỗ bán bánh, tìm chỗ tổ chức</p>
                             <span class="timeline-date">Ngày đặc biệt</span>
@@ -359,7 +375,7 @@
                         <div class="timeline-content">
                             <h3>Chuyến du lịch đầu tiên</h3>
                             <div class="timeline-photo">
-                                <img src="images/4.jpg" alt="Chuyến du lịch đầu tiên" />
+                                <img src="images/4.jpg" alt="Chuyến du lịch đầu tiên" loading="lazy" />
                             </div>
                             <p>Chúng ta đã có những kỷ niệm tuyệt vời trong chuyến du lịch đầu tiên cùng nhau đến Cát Bà - Hải Phòng</p>
                             <span class="timeline-date">Hành trình đẹp</span>
@@ -370,7 +386,7 @@
                         <div class="timeline-content">
                             <h3>Sinh nhật anh</h3>
                             <div class="timeline-photo">
-                                <img src="images/5.jpg" alt="Sinh nhật anh" />
+                                <img src="images/5.jpg" alt="Sinh nhật anh" loading="lazy" />
                             </div>
                             <p>Ngày sinh nhật anh trở nên đặc biệt hơn bao giờ hết khi có em bên cạnh, cùng thổi nến và cầu nguyện...</p>
                             <span class="timeline-date">Ngày hạnh phúc</span>
@@ -381,7 +397,7 @@
                         <div class="timeline-content">
                             <h3>Có những lúc nhớ nhau đến phát khóc</h3>
                             <div class="timeline-photo">
-                                <img src="images/6.jpg" alt="Nhớ nhau đến phát khóc" />
+                                <img src="images/6.jpg" alt="Nhớ nhau đến phát khóc" loading="lazy" />
                             </div>
                             <p>Những lúc xa nhau, em nhớ anh đến phát khóc, anh cũng chỉ có thể cho em lời động viên.</p>
                             <span class="timeline-date">Khi xa nhau</span>
@@ -392,7 +408,7 @@
                         <div class="timeline-content">
                             <h3>Giáng sinh 2024</h3>
                             <div class="timeline-photo">
-                                <img src="images/7.jpg" alt="Giáng sinh 2024" />
+                                <img src="images/7.jpg" alt="Giáng sinh 2024" loading="lazy" />
                             </div>
                             <p>Giáng sinh đầu tiên bên nhau, đêm Noel ấm áp với em,thật hạnh phúc..</p>
                             <span class="timeline-date">Đêm Noel ấm áp</span>
@@ -403,25 +419,72 @@
                         <div class="timeline-content">
                             <h3>Bức ảnh đẹp nhất</h3>
                             <div class="timeline-photo">
-                                <img src="images/8.jpg" alt="Bức ảnh đẹp nhất" />
+                                <img src="images/8.jpg" alt="Bức ảnh đẹp nhất" loading="lazy" />
                             </div>
                             <p>Khoảnh khắc đẹp nhất của chúng ta, cùng nhau ngắm pháo hoa, đón năm mới, gương mặt rạng rỡỡ,..</p>
                             <span class="timeline-date">Kỷ niệm quý giá</span>
                         </div>
                     </div>
                 </div>
-                <button class="continue-btn" onclick="nextSection('quiz-section')">
+                <button class="continue-btn" onclick="goToQuiz()">
                     <span>Thử thách cuối cùng ❤️</span>
                 </button>
             </div>
         </section>
 
-        <!-- Section 4: Quiz Tương Tác -->
-        <section id="quiz-section" class="section">
+        <!-- Section 4: Countdown Timer -->
+        <section id="countdown-section" class="section" style="display: none;">
             <div class="content-wrapper">
-                <h2 class="section-title">Quiz: Thử thách dành cho em
-💕</h2>
-                <div id="quiz-container">
+                <h2 class="section-title" data-aos="fade-down" data-aos-duration="1000">Thời Gian Yêu Nhau 💕</h2>
+                <p class="section-description" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">Chúng ta đã yêu nhau được bao lâu rồi nhỉ?</p>
+                
+                <div class="countdown-section" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="400">
+                    <h4 class="countdown-title">Chúng ta yêu nhau được</h4>
+                    <div class="countdown-timer" id="countdown-timer">
+                        <div class="time-unit">
+                            <span class="time-number" id="years">0</span>
+                            <span class="time-label">Năm</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-number" id="months">0</span>
+                            <span class="time-label">Tháng</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-number" id="days">0</span>
+                            <span class="time-label">Ngày</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-number" id="hours">0</span>
+                            <span class="time-label">Giờ</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-number" id="minutes">0</span>
+                            <span class="time-label">Phút</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-number" id="seconds">0</span>
+                            <span class="time-label">Giây</span>
+                        </div>
+                    </div>
+                    <p class="countdown-date">Từ ngày 04/11/2023 💕</p>
+                </div>
+                
+                <div class="countdown-message" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="600">
+                    <p class="romantic-message">Mỗi giây phút bên em đều là khoảnh khắc quý giá nhất!</p>
+                    <p class="romantic-message">Anh mong được yêu em thêm nhiều năm nữa...</p>
+                </div>
+                
+                <button class="continue-btn" onclick="goToCarousel()" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="800">
+                    <span>Cùng nhau khám phá hành trình 💕</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 5: Quiz Tương Tác -->
+        <section id="quiz-section" class="section" style="display: none;">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-aos="fade-down" data-aos-duration="1000">Quiz: Thử thách dành cho em💕</h2>
+                <div id="quiz-container" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
                     <div class="quiz-question active" data-question="1">
                         <h3>Ngày nào anh và em gặp nhau lần đầu tiên?</h3>
                         <div class="quiz-options">
@@ -461,9 +524,33 @@
                     <div class="quiz-results" id="quiz-results" style="display: none;">
                         <h3>Kết Quả Quiz 💖</h3>
                         <div class="result-message">
-                            <p>Dù em trả lời đúng hay sai, điều quan trọng nhất là chúng ta đang ở bên nhau và yêu thương nhau!</p>
-                            <p>Anh yêu em vì chính con người em, không phải vì những câu trả lời đúng hay sai.</p>
+                            <p class="romantic-message">Dù em trả lời đúng hay sai, điều quan trọng nhất là chúng ta đang ở bên nhau và yêu thương nhau!</p>
+                            <p class="romantic-message">Anh yêu em vì chính con người em, không phải vì những câu trả lời đúng hay sai.</p>
                             <p class="final-message">Chúc em một ngày 20/10 thật hạnh phúc và ý nghĩa! ❤️</p>
+                        </div>
+                        
+                        <!-- Countdown Timer Section -->
+                        <div class="countdown-section">
+                            <h4 class="countdown-title">Chúng ta yêu nhau được</h4>
+                            <div class="countdown-timer" id="countdown-timer">
+                                <div class="time-unit">
+                                    <span class="time-number" id="days">0</span>
+                                    <span class="time-label">Ngày</span>
+                                </div>
+                                <div class="time-unit">
+                                    <span class="time-number" id="hours">0</span>
+                                    <span class="time-label">Giờ</span>
+                                </div>
+                                <div class="time-unit">
+                                    <span class="time-number" id="minutes">0</span>
+                                    <span class="time-label">Phút</span>
+                                </div>
+                                <div class="time-unit">
+                                    <span class="time-number" id="seconds">0</span>
+                                    <span class="time-label">Giây</span>
+                                </div>
+                            </div>
+                            <p class="countdown-date">Từ ngày 04/11/2023 💕</p>
                         </div>
                     </div>
                 </div>
@@ -475,6 +562,8 @@
     </div>
 
     <!-- Scripts -->
+    <script src="particles-config.js"></script>
+    <script src="three-background.js"></script>
     <script src="script.js"></script>
     <script src="effects.js"></script>
     <script src="puzzle.js"></script>

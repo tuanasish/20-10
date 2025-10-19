@@ -4,8 +4,158 @@ let currentQuestion = 1;
 const totalQuestions = 4;
 let quizAnswers = {};
 
+// Device detection and performance optimization
+function detectDeviceCapabilities() {
+    const isLowEndDevice = navigator.hardwareConcurrency <= 2 || navigator.deviceMemory <= 2;
+    const isMobile = window.innerWidth <= 768;
+    const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
+    const isUltraMobile = window.innerWidth <= 480;
+    
+    // Performance monitoring
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+    
+    return {
+        isLowEndDevice,
+        isMobile,
+        isTablet,
+        isUltraMobile,
+        isSlowConnection,
+        shouldUseHeavyEffects: false, // Disable heavy effects by default for performance
+        shouldUseAnimations: !isLowEndDevice && !isSlowConnection
+    };
+}
+
+// Countdown Timer Function
+function startCountdown() {
+    const startDate = new Date('2023-11-04T00:00:00');
+    const now = new Date();
+    
+    // Calculate years, months, days
+    let years = now.getFullYear() - startDate.getFullYear();
+    let months = now.getMonth() - startDate.getMonth();
+    let days = now.getDate() - startDate.getDate();
+    
+    // Adjust for negative days
+    if (days < 0) {
+        months--;
+        const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += lastMonth.getDate();
+    }
+    
+    // Adjust for negative months
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+    
+    // Calculate hours, minutes, seconds
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    
+    document.getElementById('years').textContent = years;
+    document.getElementById('months').textContent = months;
+    document.getElementById('days').textContent = days;
+    document.getElementById('hours').textContent = hours;
+    document.getElementById('minutes').textContent = minutes;
+    document.getElementById('seconds').textContent = seconds;
+}
+
+// Update countdown every second (optimized)
+let countdownInterval = null;
+
+function updateCountdown() {
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+    
+    countdownInterval = setInterval(() => {
+        startCountdown();
+    }, 1000);
+}
+
+// Stop countdown when not needed
+function stopCountdown() {
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+}
+
+// Go to countdown section after puzzle completion
+function goToCountdown() {
+    // Hide current section
+    const currentSection = document.querySelector('.section:not([style*="display: none"])');
+    if (currentSection) {
+        currentSection.style.display = 'none';
+    }
+    
+    // Show countdown section
+    const countdownSection = document.getElementById('countdown-section');
+    if (countdownSection) {
+        countdownSection.style.display = 'block';
+        countdownSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Start countdown timer
+        startCountdown();
+        updateCountdown();
+    }
+}
+
+// Go to carousel section
+function goToCarousel() {
+    // Hide countdown section
+    const countdownSection = document.getElementById('countdown-section');
+    if (countdownSection) {
+        countdownSection.style.display = 'none';
+    }
+    
+    // Show carousel section (album-section)
+    const carouselSection = document.getElementById('album-section');
+    if (carouselSection) {
+        carouselSection.style.display = 'block';
+        carouselSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Go to quiz section (from timeline)
+function goToQuiz() {
+    // Hide current section
+    const currentSection = document.querySelector('.section:not([style*="display: none"])');
+    if (currentSection) {
+        currentSection.style.display = 'none';
+    }
+    
+    // Show quiz section
+    const quizSection = document.getElementById('quiz-section');
+    if (quizSection) {
+        quizSection.style.display = 'block';
+        quizSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
 // Initialize the website
 document.addEventListener('DOMContentLoaded', function() {
+    const deviceCapabilities = detectDeviceCapabilities();
+    
+    // Initialize AOS with advanced performance optimization
+    if (typeof AOS !== 'undefined' && deviceCapabilities.shouldUseAnimations) {
+        AOS.init({
+            duration: 400, // Faster animations
+            easing: 'ease-out',
+            once: true,
+            offset: 30, // Reduced offset
+            delay: 0,
+            disable: deviceCapabilities.isLowEndDevice || deviceCapabilities.isSlowConnection
+        });
+    }
+    
+    // Disable Lenis smooth scrolling for better performance
+    // if (typeof Lenis !== 'undefined' && !deviceCapabilities.isMobile) {
+    //     // Disabled for performance
+    // }
+    
     // Start background music immediately
     startBackgroundMusic();
     
@@ -94,7 +244,9 @@ function startTypingEffect() {
     
     function typeNextElement() {
         if (currentElementIndex >= typingElements.length) {
-            return; // All elements typed
+            // All elements typed - show game button
+            showGameButton();
+            return;
         }
         
         const currentElement = typingElements[currentElementIndex];
@@ -119,6 +271,50 @@ function startTypingEffect() {
     setTimeout(() => {
         typeNextElement();
     }, 1000);
+}
+
+// Show game button after typing complete
+function showGameButton() {
+    const letterContainer = document.querySelector('.letter-container');
+    if (letterContainer) {
+        const gameButton = document.createElement('button');
+        gameButton.className = 'continue-btn game-start-btn';
+        gameButton.innerHTML = '<span>Cùng tham gia 1 trò chơi nhé 💕</span>';
+        gameButton.onclick = goToPuzzle;
+        
+        // Add AOS animation
+        gameButton.setAttribute('data-aos', 'fade-up');
+        gameButton.setAttribute('data-aos-duration', '1200');
+        gameButton.setAttribute('data-aos-delay', '500');
+        
+        letterContainer.appendChild(gameButton);
+        
+        // Trigger AOS refresh
+        if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+        }
+    }
+}
+
+// Go to puzzle section
+function goToPuzzle() {
+    // Hide letter section
+    const letterSection = document.querySelector('.letter-container').closest('.section');
+    if (letterSection) {
+        letterSection.style.display = 'none';
+    }
+    
+    // Show puzzle section
+    const puzzleSection = document.getElementById('puzzle-section');
+    if (puzzleSection) {
+        puzzleSection.style.display = 'block';
+        puzzleSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Initialize puzzle game
+        if (typeof initPuzzleGame === 'function') {
+            initPuzzleGame();
+        }
+    }
 }
 
 function typeText(element, text, index, onComplete) {
@@ -348,6 +544,10 @@ function showQuizResults() {
     if (resultsElement) {
         resultsElement.style.display = 'block';
         resultsElement.classList.add('active');
+        
+        // Start countdown timer
+        startCountdown();
+        updateCountdown();
     }
     
     // Show restart button
@@ -564,78 +764,67 @@ document.addEventListener('DOMContentLoaded', function() {
     
 });
 
-// Mở quà tương tác với GSAP
-function openGift() {
-    const giftBox = document.getElementById('giftBox');
-    const giftLid = document.getElementById('giftLid');
-    const giftBow = document.querySelector('.gift-bow');
-    const giftBody = document.querySelector('.gift-body');
+// Mở bức thư tương tác với GSAP
+function openLetter() {
+    const letterEnvelope = document.getElementById('letterEnvelope');
+    const envelopeImage = document.querySelector('.envelope-image');
+    const letterPaper = document.getElementById('letterPaper');
     const loadingText = document.getElementById('loadingText');
     const loadingOverlay = document.getElementById('loading-overlay');
     
     // Vô hiệu hóa click để tránh spam
-    giftBox.style.pointerEvents = 'none';
+    letterEnvelope.style.pointerEvents = 'none';
     
     // Thay đổi text
-    loadingText.textContent = 'Món quà đang được mở... 💖';
+    loadingText.textContent = 'Đang mở...';
     
     // Tạo GSAP Timeline cho animation
     const tl = gsap.timeline();
     
-    // 1. Shake hộp quà (0.5s)
-    tl.to(giftBox, {
-        x: [-5, 5, -3, 3, -1, 1, 0],
-        duration: 0.5,
+    // 1. Shake bức thư nhẹ (0.3s)
+    tl.to(letterEnvelope, {
+        x: [-3, 3, -2, 2, 0],
+        duration: 0.3,
         ease: "power2.inOut"
     })
     
-    // 2. Bow bay lên và tan biến (0.3s)
-    .to(giftBow, {
+    // 2. Ảnh phong bì bay lên và fade out (0.8s)
+    .to(envelopeImage, {
         y: -50,
-        rotation: 360,
-        opacity: 0,
-        scale: 1.5,
-        duration: 0.3,
-        ease: "power2.out"
-    }, "-=0.2")
-    
-    // 3. Lid mở với rotation 3D (0.8s)
-    .to(giftLid, {
-        rotationX: -90,
-        y: -30,
-        z: -20,
+        rotation: 10,
         opacity: 0.3,
+        scale: 1.2,
         duration: 0.8,
         ease: "back.out(1.7)"
     }, "-=0.1")
     
-    // 4. Body scale và fade out (0.5s)
-    .to(giftBody, {
-        scale: 1.3,
-        rotationY: 180,
-        opacity: 0,
-        duration: 0.5,
-        ease: "power2.inOut"
-    }, "-=0.3")
+    // 3. Bức thư xuất hiện và bay lên (0.6s)
+    .to(letterPaper, {
+        opacity: 1,
+        y: -30,
+        scale: 1.1,
+        duration: 0.6,
+        ease: "power2.out"
+    }, "-=0.4")
     
-    // 5. Confetti bắn ra (1s)
+    // 4. Confetti bắn ra (1s)
     .call(() => {
         triggerConfetti();
-    }, [], 0.4)
+    }, [], 0.5)
     
-    // 6. Hearts particles bay lên
+    // 5. Hearts particles bay lên
     .call(() => {
         createHeartsBurst();
-    }, [], 0.6)
+    }, [], 0.7)
     
-    // 7. Fade out loading overlay (0.5s)
+    // 6. Fade out loading overlay (0.5s)
     .to(loadingOverlay, {
         opacity: 0,
         duration: 0.5,
         ease: "power2.out"
     }, "-=0.2")
     
-    // 8. Bắt đầu typing effect
+    // 7. Bắt đầu typing effect
     .call(() => {
         setTimeout(() => {
             loadingOverlay.style.display = 'none';
@@ -646,8 +835,8 @@ function openGift() {
 
 // Confetti Effect với Canvas-Confetti
 function triggerConfetti() {
-    // Tạo confetti burst từ vị trí hộp quà
-    const rect = document.getElementById('giftBox').getBoundingClientRect();
+    // Tạo confetti burst từ vị trí bức thư
+    const rect = document.getElementById('letterEnvelope').getBoundingClientRect();
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
     
@@ -695,8 +884,8 @@ function triggerConfetti() {
 
 // Hearts Burst Effect
 function createHeartsBurst() {
-    const giftBox = document.getElementById('giftBox');
-    const rect = giftBox.getBoundingClientRect();
+    const letterEnvelope = document.getElementById('letterEnvelope');
+    const rect = letterEnvelope.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     

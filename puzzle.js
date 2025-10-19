@@ -96,9 +96,9 @@ class PuzzleGame {
             this.gameStatus.textContent = '🎉 Hoàn thành! Em thật tuyệt vời! 💕';
             this.gameStatus.classList.add('success');
             
-            // Tự động chuyển sang section tiếp theo sau 2 giây
+            // Tự động chuyển sang countdown section sau 2 giây
             setTimeout(() => {
-                nextSection('album-section');
+                goToCountdown();
             }, 2000);
         } else {
             this.gameStatus.textContent = 'Tiếp tục nào... Em sắp xong rồi! ✨';
