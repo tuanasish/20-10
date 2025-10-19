@@ -244,8 +244,7 @@ function startTypingEffect() {
     
     function typeNextElement() {
         if (currentElementIndex >= typingElements.length) {
-            // All elements typed - show game button
-            showGameButton();
+            // All elements typed - no need to show button as it's already in HTML
             return;
         }
         
@@ -273,28 +272,7 @@ function startTypingEffect() {
     }, 1000);
 }
 
-// Show game button after typing complete
-function showGameButton() {
-    const letterContainer = document.querySelector('.letter-container');
-    if (letterContainer) {
-        const gameButton = document.createElement('button');
-        gameButton.className = 'continue-btn game-start-btn';
-        gameButton.innerHTML = '<span>Cùng tham gia 1 trò chơi nhé 💕</span>';
-        gameButton.onclick = goToPuzzle;
-        
-        // Add AOS animation
-        gameButton.setAttribute('data-aos', 'fade-up');
-        gameButton.setAttribute('data-aos-duration', '1200');
-        gameButton.setAttribute('data-aos-delay', '500');
-        
-        letterContainer.appendChild(gameButton);
-        
-        // Trigger AOS refresh
-        if (typeof AOS !== 'undefined') {
-            AOS.refresh();
-        }
-    }
-}
+// Game button is now in HTML, no need for dynamic creation
 
 // Go to puzzle section
 function goToPuzzle() {
