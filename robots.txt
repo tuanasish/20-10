@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Sitemaps (thêm nếu có sitemap)
+# Sitemap: https://example.com/sitemap.xml
+
+

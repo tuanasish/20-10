@@ -192,6 +192,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add smooth scroll behavior
     document.documentElement.style.scrollBehavior = 'smooth';
+
+    // Mobile optimization: pause/play videos based on viewport
+    setupVideoViewportObserver();
 });
 
 // Background music functions
@@ -527,6 +530,32 @@ function showQuizResults() {
     setTimeout(() => {
         resultsElement.scrollIntoView({ behavior: 'smooth' });
     }, 500);
+}
+
+// Viewport-based video control for better mobile performance
+function setupVideoViewportObserver() {
+    if (!('IntersectionObserver' in window)) return;
+    const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.25
+    };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const video = entry.target;
+            if (!(video instanceof HTMLVideoElement)) return;
+            if (entry.isIntersecting) {
+                // Try play when visible
+                const playPromise = video.play();
+                if (playPromise && typeof playPromise.then === 'function') {
+                    playPromise.catch(() => {/* ignore autoplay errors */});
+                }
+            } else {
+                video.pause();
+            }
+        });
+    }, options);
+    document.querySelectorAll('video').forEach(v => observer.observe(v));
 }
 
 
